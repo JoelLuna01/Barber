@@ -23,20 +23,20 @@ export default async function BookingPage({ params }: BookingPageProps) {
   const appointments = await AppointmentsService.getAppointments()
 
   return (
-    <div className="min-h-screen bg-zinc-50 py-10 dark:bg-black flex flex-col justify-between">
+    <div className="min-h-screen bg-[#0B0B0C] py-10 flex flex-col justify-between">
       
       {/* Top Navbar Header */}
       <div className="w-full max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-2 text-zinc-900 dark:text-white">
-            <Scissors className="h-6 w-6 rotate-90 text-amber-500" />
-            <span className="font-sans text-xl font-bold tracking-tight">
-              BARBER<span className="text-amber-500">BOOK</span>
+        <div className="flex items-center justify-between h-16 border-b border-white/5 pb-4">
+          <Link href="/" className="flex items-center gap-2 text-[#F3EDE2]">
+            <Scissors className="h-5 w-5 rotate-90 text-[#D89B2B]" />
+            <span className="font-serif text-xl font-bold tracking-tight">
+              BARBER<span className="text-[#D89B2B]">BOOK</span>
             </span>
           </Link>
           
-          <div className="text-xs font-semibold text-zinc-400">
-            Sucursal: <span className="text-zinc-800 dark:text-zinc-200">{shop.name}</span>
+          <div className="text-xs font-bold uppercase tracking-wider text-[#A1A1AA]">
+            Sucursal: <span className="text-[#F3EDE2]">{shop.name}</span>
           </div>
         </div>
       </div>
@@ -56,8 +56,8 @@ export default async function BookingPage({ params }: BookingPageProps) {
       </main>
 
       {/* Footer */}
-      <footer className="py-6 text-center text-xs text-zinc-400">
-        © {new Date().getFullYear()} {shop.name} • Reservas rápidas y seguras.
+      <footer className="py-6 text-center text-xs font-semibold uppercase tracking-wider text-[#A1A1AA]/50">
+        © {new Date().getFullYear()} {shop.name} • Reservas de Autor Rápidas y Seguras.
       </footer>
 
     </div>
