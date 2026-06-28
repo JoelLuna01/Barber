@@ -2,15 +2,23 @@
 
 import * as React from "react"
 import { motion } from "framer-motion"
+import Link from "next/link"
 import { 
   TrendingUp, 
   Calendar, 
-  ShoppingBag, 
   DollarSign, 
   AlertTriangle, 
   ArrowUpRight, 
   CheckCircle,
-  Coins
+  Coins,
+  Clock,
+  Plus,
+  ShoppingCart,
+  UserPlus,
+  Box,
+  CreditCard,
+  ArrowRight,
+  Scissors
 } from "lucide-react"
 
 interface OverviewTabProps {
@@ -38,10 +46,11 @@ interface OverviewTabProps {
     hoursChart: { hour: string; count: number }[]
     customerRetention: { name: string; value: number }[]
   }
+  appointments?: any[]
   onSwitchTab: (tab: string) => void
 }
 
-export default function OverviewTab({ metrics, analytics, onSwitchTab }: OverviewTabProps) {
+export default function OverviewTab({ metrics, analytics, appointments = [], onSwitchTab }: OverviewTabProps) {
   
   // Find maximum income in monthly data to scale SVG chart heights
   const maxIncome = Math.max(...analytics.monthlyChart.map(d => d.income), 1000)
@@ -54,6 +63,20 @@ export default function OverviewTab({ metrics, analytics, onSwitchTab }: Overvie
   const recurrentPercentage = totalClients > 0 
     ? Math.round((analytics.customerRetention[0].value / totalClients) * 100) 
     : 0
+
+  // Get the next upcoming appointment (pending or confirmed, future)
+  const now = new Date()
+  const nextAppointment = appointments
+    .filter(a => ["pending", "confirmed"].includes(a.status) && new Date(a.start_time) >= now)
+    .sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime())[0] || null
+
+  const quickActions = [
+    { label: "Nueva Cita", icon: <Calendar className="h-5 w-5" />, tab: "appointments", color: "bg-blue-600 hover:bg-blue-500" },
+    { label: "Nueva Venta", icon: <ShoppingCart className="h-5 w-5" />, tab: "caja", color: "bg-amber-500 hover:bg-amber-400 text-zinc-950" },
+    { label: "Abrir Caja", icon: <CreditCard className="h-5 w-5" />, tab: "caja", color: "bg-emerald-600 hover:bg-emerald-500" },
+    { label: "Nuevo Cliente", icon: <UserPlus className="h-5 w-5" />, tab: "customers", color: "bg-violet-600 hover:bg-violet-500" },
+    { label: "Inventario", icon: <Box className="h-5 w-5" />, tab: "inventory", color: "bg-zinc-700 hover:bg-zinc-600" },
+  ]
 
   return (
     <div className="space-y-8 font-sans">
@@ -73,7 +96,7 @@ export default function OverviewTab({ metrics, analytics, onSwitchTab }: Overvie
             </div>
           </div>
           <button 
-            onClick={() => onSwitchTab("inventario")}
+            onClick={() => onSwitchTab("inventory")}
             className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-amber-600 hover:text-amber-500 dark:text-amber-400"
           >
             Ver Inventario
@@ -81,6 +104,105 @@ export default function OverviewTab({ metrics, analytics, onSwitchTab }: Overvie
           </button>
         </motion.div>
       )}
+
+      {/* 0b. Next Appointment Widget + Quick Actions */}
+      <div className="grid gap-5 lg:grid-cols-3">
+
+        {/* Next Appointment Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="lg:col-span-2 rounded-3xl border border-zinc-800 bg-zinc-900 p-6"
+        >
+          <div className="flex items-center justify-between mb-5">
+            <h3 className="text-xs font-black uppercase tracking-widest text-zinc-400">Próxima Cita</h3>
+            <button onClick={() => onSwitchTab("appointments")} className="flex items-center gap-1 text-xs font-bold text-amber-500 hover:text-amber-400">
+              Ver Agenda <ArrowRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
+          {nextAppointment ? (
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              {/* Time block */}
+              <div className="flex flex-col items-center justify-center rounded-2xl bg-zinc-800 px-6 py-4 text-center shrink-0">
+                <span className="text-3xl font-black text-white">
+                  {new Date(nextAppointment.start_time).toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit" })}
+                </span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mt-1">
+                  {new Date(nextAppointment.start_time).toLocaleDateString("es-MX", { weekday: "short", day: "numeric", month: "short" })}
+                </span>
+              </div>
+              {/* Details */}
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <div className={`h-2 w-2 rounded-full ${
+                    nextAppointment.status === "confirmed" ? "bg-emerald-500" : "bg-amber-500 animate-pulse"
+                  }`} />
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                    {nextAppointment.status === "confirmed" ? "Confirmada" : "Pendiente"}
+                  </span>
+                </div>
+                <h4 className="mt-2 text-lg font-black text-white">
+                  {nextAppointment.customer?.full_name || "Cliente"}
+                </h4>
+                <p className="text-sm text-zinc-400 mt-0.5">
+                  {nextAppointment.service?.name || "Servicio"}
+                </p>
+                <div className="mt-3 flex items-center gap-1.5 text-xs text-zinc-500">
+                  <Clock className="h-3.5 w-3.5" />
+                  <span>{nextAppointment.service?.duration_minutes || 30} min</span>
+                  <span>•</span>
+                  <span className="font-bold text-zinc-300">${Number(nextAppointment.total_price).toFixed(2)}</span>
+                </div>
+              </div>
+              {/* Quick status */}
+              <div className="flex sm:flex-col gap-2">
+                <button className="flex items-center gap-1.5 rounded-xl bg-emerald-600/20 px-3 py-2 text-xs font-bold text-emerald-400 hover:bg-emerald-600/30 transition">
+                  <CheckCircle className="h-3.5 w-3.5" /> Confirmar
+                </button>
+                <button onClick={() => onSwitchTab("appointments")} className="flex items-center gap-1.5 rounded-xl bg-zinc-800 px-3 py-2 text-xs font-bold text-zinc-300 hover:bg-zinc-700 transition">
+                  <Scissors className="h-3.5 w-3.5" /> Ver Detalles
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-8 text-center">
+              <Calendar className="h-10 w-10 text-zinc-700 mb-3" />
+              <p className="text-sm font-semibold text-zinc-500">No hay citas próximas</p>
+              <button
+                onClick={() => onSwitchTab("appointments")}
+                className="mt-3 flex items-center gap-1.5 rounded-xl bg-amber-500 px-4 py-2 text-xs font-bold text-zinc-950 hover:bg-amber-400 transition"
+              >
+                <Plus className="h-3.5 w-3.5" /> Nueva Cita
+              </button>
+            </div>
+          )}
+        </motion.div>
+
+        {/* Quick Actions Panel */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="rounded-3xl border border-zinc-800 bg-zinc-900 p-6"
+        >
+          <h3 className="text-xs font-black uppercase tracking-widest text-zinc-400 mb-5">Acciones Rápidas</h3>
+          <div className="flex flex-col gap-2">
+            {quickActions.map((action) => (
+              <button
+                key={action.label}
+                onClick={() => onSwitchTab(action.tab)}
+                className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-white transition active:scale-95 ${action.color}`}
+              >
+                {action.icon}
+                {action.label}
+              </button>
+            ))}
+          </div>
+        </motion.div>
+
+      </div>
 
       {/* 2. Top Metric Cards Grid */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

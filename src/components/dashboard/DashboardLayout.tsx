@@ -259,6 +259,7 @@ export default function DashboardLayout({ initialData }: DashboardLayoutProps) {
               <OverviewTab
                 metrics={data.metrics}
                 analytics={data.analytics}
+                appointments={data.appointments}
                 onSwitchTab={setActiveTab}
               />
             )}
