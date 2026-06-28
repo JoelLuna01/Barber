@@ -41,7 +41,7 @@ export default function FAQSection() {
 
         {/* ── Header ─────────────────────────────────────────────────── */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="mb-14"
@@ -56,7 +56,7 @@ export default function FAQSection() {
         </motion.div>
 
         {/* ── Accordion ──────────────────────────────────────────────── */}
-        <div className="space-y-1">
+        <div className="space-y-2">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index
             return (
@@ -68,8 +68,8 @@ export default function FAQSection() {
                 transition={{ duration: 0.35, delay: index * 0.05 }}
                 className={`overflow-hidden rounded-2xl border transition-all duration-300 ${
                   isOpen
-                    ? "border-[#D89B2B]/20 bg-[#17181B]"
-                    : "border-white/5 bg-[#17181B]/60 hover:border-white/10"
+                    ? "border-[#D89B2B]/20 bg-[#1B1D21]"
+                    : "border-white/5 bg-[#15171A]/60 hover:border-white/10"
                 }`}
               >
                 <button
@@ -77,7 +77,7 @@ export default function FAQSection() {
                   className="flex w-full items-center justify-between px-6 py-5 text-left focus:outline-none"
                   aria-expanded={isOpen}
                 >
-                  <span className={`pr-6 text-[15px] font-semibold transition-colors ${
+                  <span className={`pr-6 text-[14.5px] font-bold transition-colors ${
                     isOpen ? "text-[#F3EDE2]" : "text-[#A1A1AA]"
                   }`}>
                     {faq.question}
@@ -99,7 +99,7 @@ export default function FAQSection() {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.25, ease: "easeInOut" }}
                     >
-                      <div className="border-t border-white/5 px-6 pb-6 pt-4 text-[14px] leading-[1.8] text-[#A1A1AA]">
+                      <div className="border-t border-white/5 px-6 pb-6 pt-4 text-[13.5px] leading-[1.8] text-[#A1A1AA]">
                         {faq.answer}
                       </div>
                     </motion.div>

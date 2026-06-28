@@ -57,23 +57,28 @@ export default async function Home() {
       <FAQSection />
 
       {/* ── Premium Footer ─────────────────────────────────────────── */}
-      <footer className="w-full border-t border-white/5 bg-[#0B0B0C]">
+      <footer className="w-full bg-[#0B0B0C]">
         {/* Final CTA banner */}
-        <div className="border-b border-white/5 py-16">
-          <div className="mx-auto max-w-4xl px-6 md:px-12 text-center">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#D89B2B] mb-4">Reserva tu ritual</p>
-            <h2 className="font-serif text-4xl font-bold text-[#F3EDE2] md:text-5xl">
-              Tu mejor versión<br />empieza aquí.
-            </h2>
-            <p className="mt-4 text-[#A1A1AA] text-base max-w-md mx-auto">
-              Sin esperas, sin complicaciones. Elige tu servicio, elige tu hora y preséntate listo.
-            </p>
-            <a
-              href="/b/barberbook-studio/book"
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#D89B2B] px-8 py-4 text-sm font-bold text-[#0B0B0C] transition-all hover:bg-[#e0a835] active:scale-[0.97] shadow-lg shadow-[#D89B2B]/20"
-            >
-              Reservar Ahora — Es Gratis
-            </a>
+        <div className="mx-auto max-w-7xl px-6 md:px-12 py-16">
+          <div className="relative overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-br from-[#15171A] to-[#1B1D21] px-8 py-20 text-center shadow-2xl">
+            {/* Ambient light leak inside the card */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(216,155,43,0.15),transparent_60%)]" />
+            
+            <div className="relative z-10 max-w-xl mx-auto">
+              <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#D89B2B] mb-4">El primer paso es el ritual</p>
+              <h2 className="font-serif text-4xl font-bold text-[#F3EDE2] md:text-5xl leading-tight">
+                Tu mejor versión<br />empieza aquí.
+              </h2>
+              <p className="mt-4 text-[#A1A1AA] text-[14px] leading-relaxed max-w-sm mx-auto">
+                Agenda tu cita en segundos. Sin llamadas, sin registros previos obligatorios y sin esperas.
+              </p>
+              <a
+                href="/b/barberbook-studio/book"
+                className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#D89B2B] px-8 py-4 text-xs font-bold uppercase tracking-wider text-[#0B0B0C] transition-all hover:bg-[#e0a835] active:scale-[0.97] shadow-lg shadow-[#D89B2B]/20"
+              >
+                Reservar tu Horario
+              </a>
+            </div>
           </div>
         </div>
 
