@@ -33,6 +33,7 @@ interface DashboardLayoutProps {
     barbershop?: any
     metrics: any
     analytics: any
+    userRole?: "admin" | "barber" | "client"
   }
 }
 
@@ -41,6 +42,11 @@ export default function DashboardLayout({ initialData }: DashboardLayoutProps) {
   const [activeTab, setActiveTab] = React.useState<string>("overview")
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState<boolean>(false)
   const [theme, setTheme] = React.useState<"light" | "dark">("dark")
+
+  const userRole = initialData.userRole ?? "admin"
+  const isAdmin = userRole === "admin"
+  const roleLabel = userRole === "admin" ? "Administrador" : userRole === "barber" ? "Barbero" : "Cliente"
+  const roleInitials = userRole === "admin" ? "AD" : userRole === "barber" ? "BR" : "CL"
 
   // Local state copy of data to allow instantaneous refetches / state changes
   const [data, setData] = React.useState(initialData)
@@ -72,14 +78,16 @@ export default function DashboardLayout({ initialData }: DashboardLayoutProps) {
     router.push("/login")
   }
 
-  const menuItems = [
-    { id: "overview", label: "Resumen General", icon: <BarChart3 className="h-5 w-5" /> },
-    { id: "appointments", label: "Agenda y Citas", icon: <Calendar className="h-5 w-5" /> },
-    { id: "caja", label: "Caja y POS", icon: <Wallet className="h-5 w-5" /> },
-    { id: "customers", label: "Clientes (CRM)", icon: <Users className="h-5 w-5" /> },
-    { id: "inventory", label: "Inventario", icon: <Package className="h-5 w-5" /> },
-    { id: "settings", label: "Configuración", icon: <SettingsIcon className="h-5 w-5" /> }
+  const allMenuItems = [
+    { id: "overview", label: "Resumen General", icon: <BarChart3 className="h-5 w-5" />, adminOnly: false },
+    { id: "appointments", label: "Agenda y Citas", icon: <Calendar className="h-5 w-5" />, adminOnly: false },
+    { id: "caja", label: "Caja y POS", icon: <Wallet className="h-5 w-5" />, adminOnly: true },
+    { id: "customers", label: "Clientes (CRM)", icon: <Users className="h-5 w-5" />, adminOnly: true },
+    { id: "inventory", label: "Inventario", icon: <Package className="h-5 w-5" />, adminOnly: true },
+    { id: "settings", label: "Configuración", icon: <SettingsIcon className="h-5 w-5" />, adminOnly: true },
   ]
+  // Barbers only see overview and their appointments
+  const menuItems = isAdmin ? allMenuItems : allMenuItems.filter(item => !item.adminOnly)
 
   return (
     <div className={`min-h-screen flex bg-zinc-950 text-white font-sans ${theme === "light" ? "bg-zinc-50 text-zinc-900" : ""}`}>
@@ -120,12 +128,16 @@ export default function DashboardLayout({ initialData }: DashboardLayoutProps) {
         {/* User profile & Logout */}
         <div className="space-y-4 pt-6 border-t border-zinc-900">
           <div className="flex items-center gap-3 px-2">
-            <div className="h-9 w-9 rounded-xl bg-amber-500 flex items-center justify-center font-bold text-zinc-950 text-sm">
-              AD
+            <div className={`h-9 w-9 rounded-xl flex items-center justify-center font-bold text-sm ${
+              userRole === "admin" ? "bg-amber-500 text-zinc-950" :
+              userRole === "barber" ? "bg-emerald-500 text-white" :
+              "bg-blue-500 text-white"
+            }`}>
+              {roleInitials}
             </div>
             <div>
-              <h5 className="text-sm font-bold text-white leading-tight">Administrador</h5>
-              <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Sucursal Juárez</span>
+              <h5 className="text-sm font-bold text-white leading-tight">{roleLabel}</h5>
+              <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">BarberBook Studio</span>
             </div>
           </div>
 
