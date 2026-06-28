@@ -41,6 +41,8 @@ export default async function DashboardPage() {
   const sales = await SalesService.getSales()
   const expenses = await SalesService.getExpenses()
   const gallery = await BarberShopService.getGallery()
+  const promotions = await BarberShopService.getPromotions()
+  const barbershop = await BarberShopService.getBarbershop("barberbook-studio")
 
   // 3. Retrieve daily metrics and financial analytics
   const metrics = await AnalyticsService.getDailyDashboardMetrics()
@@ -59,6 +61,8 @@ export default async function DashboardPage() {
     sales,
     expenses,
     gallery,
+    promotions,
+    barbershop,
     metrics,
     analytics
   }

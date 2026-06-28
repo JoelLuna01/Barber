@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase"
 import { MockDatabase, mockBarbershop } from "@/lib/mock-data"
-import { Barbershop, Category, Service, Employee, GalleryItem, Review } from "@/types"
+import { Barbershop, Category, Service, Employee, GalleryItem, Review, Promotion } from "@/types"
 
 const isSupabaseConfigured = () => {
   return typeof window !== 'undefined'
@@ -212,5 +212,113 @@ export class BarberShopService {
       }
     }
     return MockDatabase.addReview(review)
+  }
+
+  // -------------------------------------------------------------
+  // Barbershop Profile & Promotions & Loyalty
+  // -------------------------------------------------------------
+  static async updateBarbershop(id: string, updates: Partial<Barbershop>): Promise<Barbershop | undefined> {
+    if (isSupabaseConfigured()) {
+      try {
+        const supabase = createClient()
+        const { data, error } = await supabase
+          .from("barbershops")
+          .update(updates)
+          .eq("id", id)
+          .select()
+          .single()
+
+        if (error) throw error
+        return data as Barbershop
+      } catch (err) {
+        console.warn("Supabase updateBarbershop failed, falling back to mock data.", err)
+      }
+    }
+    // Fallback to local mock state
+    Object.assign(mockBarbershop, updates)
+    return mockBarbershop
+  }
+
+  static async getPromotions(): Promise<Promotion[]> {
+    if (isSupabaseConfigured()) {
+      try {
+        const supabase = createClient()
+        const { data, error } = await supabase
+          .from("promotions")
+          .select("*")
+          .order("created_at", { ascending: false })
+
+        if (error) throw error
+        return data as Promotion[]
+      } catch (err) {
+        console.warn("Supabase getPromotions failed, falling back to mock data.", err)
+      }
+    }
+    return MockDatabase.promotions
+  }
+
+  static async addPromotion(promo: Omit<Promotion, "id" | "created_at">): Promise<Promotion> {
+    if (isSupabaseConfigured()) {
+      try {
+        const supabase = createClient()
+        const { data, error } = await supabase
+          .from("promotions")
+          .insert(promo)
+          .select()
+          .single()
+
+        if (error) throw error
+        return data as Promotion
+      } catch (err) {
+        console.warn("Supabase addPromotion failed, falling back to mock data.", err)
+      }
+    }
+    const newPromo: Promotion = {
+      ...promo,
+      id: `promo-${Date.now()}`,
+      created_at: new Date().toISOString()
+    }
+    MockDatabase.promotions.unshift(newPromo)
+    return newPromo
+  }
+
+  static async updatePromotion(id: string, updates: Partial<Promotion>): Promise<Promotion | undefined> {
+    if (isSupabaseConfigured()) {
+      try {
+        const supabase = createClient()
+        const { data, error } = await supabase
+          .from("promotions")
+          .update(updates)
+          .eq("id", id)
+          .select()
+          .single()
+
+        if (error) throw error
+        return data as Promotion
+      } catch (err) {
+        console.warn("Supabase updatePromotion failed, falling back to mock data.", err)
+      }
+    }
+    MockDatabase.promotions = MockDatabase.promotions.map(p => p.id === id ? { ...p, ...updates } : p)
+    return MockDatabase.promotions.find(p => p.id === id)
+  }
+
+  static async deletePromotion(id: string): Promise<boolean> {
+    if (isSupabaseConfigured()) {
+      try {
+        const supabase = createClient()
+        const { error } = await supabase
+          .from("promotions")
+          .delete()
+          .eq("id", id)
+
+        if (error) throw error
+        return true
+      } catch (err) {
+        console.warn("Supabase deletePromotion failed, falling back to mock data.", err)
+      }
+    }
+    MockDatabase.promotions = MockDatabase.promotions.filter(p => p.id !== id)
+    return true
   }
 }

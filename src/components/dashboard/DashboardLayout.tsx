@@ -29,6 +29,8 @@ interface DashboardLayoutProps {
     sales: any[]
     expenses: any[]
     gallery: any[]
+    promotions?: any[]
+    barbershop?: any
     metrics: any
     analytics: any
   }
@@ -300,6 +302,8 @@ export default function DashboardLayout({ initialData }: DashboardLayoutProps) {
                 services={data.services}
                 blockedDates={data.blockedDates}
                 gallery={data.gallery}
+                promotions={data.promotions || []}
+                barbershop={data.barbershop}
                 onRefresh={handleRefreshData}
               />
             )}
