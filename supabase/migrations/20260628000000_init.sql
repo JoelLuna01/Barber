@@ -456,7 +456,7 @@ insert into categories (id, barbershop_id, name, type) values
 -- Insert Services
 insert into services (id, barbershop_id, category_id, name, description, price, duration_minutes, image_url, color, is_active, is_featured, display_order) values
   (
-    's1111111-1111-1111-1111-111111111111',
+    'a1111111-1111-1111-1111-111111111111',
     '11111111-1111-1111-1111-111111111111',
     'c1111111-1111-1111-1111-111111111111',
     'Corte de Cabello Clásico',
@@ -470,7 +470,7 @@ insert into services (id, barbershop_id, category_id, name, description, price, 
     1
   ),
   (
-    's2222222-2222-2222-2222-222222222222',
+    'a2222222-2222-2222-2222-222222222222',
     '11111111-1111-1111-1111-111111111111',
     'c2222222-2222-2222-2222-222222222222',
     'Perfilado de Barba Ritual',
@@ -484,7 +484,7 @@ insert into services (id, barbershop_id, category_id, name, description, price, 
     2
   ),
   (
-    's3333333-3333-3333-3333-333333333333',
+    'a3333333-3333-3333-3333-333333333333',
     '11111111-1111-1111-1111-111111111111',
     'c3333333-3333-3333-3333-333333333333',
     'Ritual Completo (Corte + Barba)',
@@ -533,12 +533,12 @@ insert into employees (id, barbershop_id, name, avatar_url, bio, experience_year
 
 -- Map Employee Services
 insert into employee_services (employee_id, service_id) values
-  ('e1111111-1111-1111-1111-111111111111', 's1111111-1111-1111-1111-111111111111'),
-  ('e1111111-1111-1111-1111-111111111111', 's2222222-2222-2222-2222-222222222222'),
-  ('e1111111-1111-1111-1111-111111111111', 's3333333-3333-3333-3333-333333333333'),
-  ('e2222222-2222-2222-2222-222222222222', 's1111111-1111-1111-1111-111111111111'),
-  ('e2222222-2222-2222-2222-222222222222', 's2222222-2222-2222-2222-222222222222'),
-  ('e2222222-2222-2222-2222-222222222222', 's3333333-3333-3333-3333-333333333333');
+  ('e1111111-1111-1111-1111-111111111111', 'a1111111-1111-1111-1111-111111111111'),
+  ('e1111111-1111-1111-1111-111111111111', 'a2222222-2222-2222-2222-222222222222'),
+  ('e1111111-1111-1111-1111-111111111111', 'a3333333-3333-3333-3333-333333333333'),
+  ('e2222222-2222-2222-2222-222222222222', 'a1111111-1111-1111-1111-111111111111'),
+  ('e2222222-2222-2222-2222-222222222222', 'a2222222-2222-2222-2222-222222222222'),
+  ('e2222222-2222-2222-2222-222222222222', 'a3333333-3333-3333-3333-333333333333');
 
 -- Insert Working Hours (Monday to Saturday, 09:00 to 18:00, lunch 13:00 to 14:00)
 insert into working_hours (employee_id, day_of_week, start_time, end_time, lunch_start, lunch_end, is_active)
@@ -556,7 +556,7 @@ cross join (values (1), (2), (3), (4), (5), (6)) days(day);
 -- Insert Sample Products
 insert into products (id, barbershop_id, category_id, name, brand, description, price, cost, stock, sku, barcode, supplier, image_url, is_active) values
   (
-    'p1111111-1111-1111-1111-111111111111',
+    'b1111111-1111-1111-1111-111111111111',
     '11111111-1111-1111-1111-111111111111',
     'c4444444-4444-4444-4444-444444444444',
     'Pomada Modeladora Fuerte',
@@ -572,7 +572,7 @@ insert into products (id, barbershop_id, category_id, name, brand, description, 
     true
   ),
   (
-    'p2222222-2222-2222-2222-222222222222',
+    'b2222222-2222-2222-2222-222222222222',
     '11111111-1111-1111-1111-111111111111',
     'c4444444-4444-4444-4444-444444444444',
     'Aceite Hidratante para Barba',
