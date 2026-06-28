@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { motion } from "framer-motion"
-import Link from "next/link"
 import { 
   TrendingUp, 
   Calendar, 
@@ -20,33 +19,12 @@ import {
   ArrowRight,
   Scissors
 } from "lucide-react"
+import { Appointment, DashboardAnalytics, DashboardMetrics } from "@/types"
 
 interface OverviewTabProps {
-  metrics: {
-    todayIncome: number
-    weeklyIncome: number
-    monthlyIncome: number
-    yearlyIncome: number
-    todayAppointmentsCount: number
-    pendingAppointmentsCount: number
-    completedAppointmentsCount: number
-    lowStockCount: number
-    lowStockList: any[]
-    cajaStatus: "open" | "closed"
-    cajaRegister: any
-  }
-  analytics: {
-    totalRevenue: number
-    totalExpenses: number
-    netProfit: number
-    ticketAverage: number
-    monthlyChart: { name: string; income: number; expenses: number; net: number }[]
-    serviceChart: { name: string; value: number }[]
-    employeeChart: { name: string; value: number }[]
-    hoursChart: { hour: string; count: number }[]
-    customerRetention: { name: string; value: number }[]
-  }
-  appointments?: any[]
+  metrics: DashboardMetrics
+  analytics: DashboardAnalytics
+  appointments?: Appointment[]
   onSwitchTab: (tab: string) => void
 }
 

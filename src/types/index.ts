@@ -300,6 +300,32 @@ export interface ActivityLog {
   barbershop_id: string
   profile_id: string | null
   action: string
-  details: any
+  details: Record<string, unknown>
   created_at: string
+}
+
+export interface DashboardMetrics {
+  todayIncome: number
+  weeklyIncome: number
+  monthlyIncome: number
+  yearlyIncome: number
+  todayAppointmentsCount: number
+  pendingAppointmentsCount: number
+  completedAppointmentsCount: number
+  lowStockCount: number
+  lowStockList: Product[]
+  cajaStatus: "open" | "closed"
+  cajaRegister: CashRegister | null
+}
+
+export interface DashboardAnalytics {
+  totalRevenue: number
+  totalExpenses: number
+  netProfit: number
+  ticketAverage: number
+  monthlyChart: { name: string; income: number; expenses: number; net: number }[]
+  serviceChart: { name: string; value: number }[]
+  employeeChart: { name: string; value: number }[]
+  hoursChart: { hour: string; count: number }[]
+  customerRetention: { name: string; value: number }[]
 }

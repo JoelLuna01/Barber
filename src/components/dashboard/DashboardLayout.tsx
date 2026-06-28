@@ -14,25 +14,43 @@ import InventoryTab from "./InventoryTab"
 import CajaTab from "./CajaTab"
 import SettingsTab from "./SettingsTab"
 import { createClient } from "@/lib/supabase"
+import {
+  Appointment,
+  Barbershop,
+  BlockedDate,
+  CashMovement,
+  CashRegister,
+  Category,
+  Customer,
+  DashboardAnalytics,
+  DashboardMetrics,
+  Expense,
+  GalleryItem,
+  Product,
+  Promotion,
+  Sale,
+  Service,
+  Employee,
+} from "@/types"
 
 interface DashboardLayoutProps {
   initialData: {
-    services: any[]
-    categories: any[]
-    employees: any[]
-    blockedDates: any[]
-    appointments: any[]
-    customers: any[]
-    products: any[]
-    cashRegisters: any[]
-    cashMovements: any[]
-    sales: any[]
-    expenses: any[]
-    gallery: any[]
-    promotions?: any[]
-    barbershop?: any
-    metrics: any
-    analytics: any
+    services: Service[]
+    categories: Category[]
+    employees: Employee[]
+    blockedDates: BlockedDate[]
+    appointments: Appointment[]
+    customers: Customer[]
+    products: Product[]
+    cashRegisters: CashRegister[]
+    cashMovements: CashMovement[]
+    sales: Sale[]
+    expenses: Expense[]
+    gallery: GalleryItem[]
+    promotions?: Promotion[]
+    barbershop?: Barbershop
+    metrics: DashboardMetrics
+    analytics: DashboardAnalytics
     userRole?: "admin" | "barber" | "client"
   }
 }
@@ -49,7 +67,7 @@ export default function DashboardLayout({ initialData }: DashboardLayoutProps) {
   const roleInitials = userRole === "admin" ? "AD" : userRole === "barber" ? "BR" : "CL"
 
   // Local state copy of data to allow instantaneous refetches / state changes
-  const [data, setData] = React.useState(initialData)
+  const [data] = React.useState(initialData)
 
   const handleRefreshData = async () => {
     // Perform a router.refresh() to get latest server props

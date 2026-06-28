@@ -9,6 +9,10 @@ import Link from "next/link"
 
 type Role = "admin" | "barber" | "client"
 
+function getErrorMessage(err: unknown): string {
+  return err instanceof Error ? err.message : String(err || "")
+}
+
 function getRoleDestination(role: Role): string {
   if (role === "admin" || role === "barber") return "/dashboard"
   return "/"
@@ -153,8 +157,8 @@ export default function LoginPage() {
           setTab("login")
         }
       }
-    } catch (err: any) {
-      const msg: string = err.message || ""
+    } catch (err) {
+      const msg = getErrorMessage(err)
       if (msg.includes("Invalid login credentials")) {
         setErrorMsg("Correo o contraseña incorrectos. Verifica tus datos e inténtalo de nuevo.")
       } else if (msg.includes("Email not confirmed")) {

@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, Star, Crown, Award, Phone, Mail, UserPlus, ChevronDown, ChevronUp } from "lucide-react"
+import { Search, Crown, Award, Phone, Mail, UserPlus, ChevronDown, ChevronUp } from "lucide-react"
 import { Customer } from "@/types"
 import { AppointmentsService } from "@/services/appointments.service"
 
@@ -10,6 +10,20 @@ interface CustomersTabProps {
   customers: Customer[]
   onRefresh: () => void
 }
+
+type EditableCustomerField = keyof Pick<
+  Customer,
+  "full_name" | "phone" | "email" | "hair_type" | "beard_type" | "allergies"
+>
+
+const EDITABLE_CUSTOMER_FIELDS: { label: string; field: EditableCustomerField }[] = [
+  { label: "Nombre", field: "full_name" },
+  { label: "Telefono", field: "phone" },
+  { label: "Email", field: "email" },
+  { label: "Tipo de Cabello", field: "hair_type" },
+  { label: "Tipo de Barba", field: "beard_type" },
+  { label: "Alergias", field: "allergies" },
+]
 
 function getLoyaltyBadge(visits: number): { label: string; icon: React.ReactNode; color: string } | null {
   if (visits >= 10) return { label: "VIP ⭐", icon: <Crown className="h-3 w-3" />, color: "text-amber-700 bg-amber-100 dark:bg-amber-950/30 dark:text-amber-400" }

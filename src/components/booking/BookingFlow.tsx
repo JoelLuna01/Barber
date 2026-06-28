@@ -5,13 +5,9 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { 
   ChevronLeft, 
-  Calendar as CalendarIcon, 
   Clock, 
-  User, 
   Scissors, 
   CheckCircle, 
-  Phone, 
-  Mail, 
   ChevronRight, 
   AlertCircle,
   KeyRound
@@ -33,9 +29,10 @@ interface BookingFlowProps {
   shopWhatsapp: string
 }
 
+type BookableTimeSlot = TimeSlot & { employeeId?: string }
+
 export default function BookingFlow({
   services,
-  categories,
   employees,
   blockedDates,
   appointments,
@@ -45,14 +42,16 @@ export default function BookingFlow({
 }: BookingFlowProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const initialService = services.find(s => s.id === searchParams.get("service")) ?? null
+  const initialBarber = employees.find(e => e.id === searchParams.get("barber")) ?? null
 
   // -------------------------------------------------------------
   // Step & Selections State
   // -------------------------------------------------------------
-  const [step, setStep] = React.useState<number>(1)
+  const [step, setStep] = React.useState<number>(initialService ? 2 : 1)
   
-  const [selectedService, setSelectedService] = React.useState<Service | null>(null)
-  const [selectedBarber, setSelectedBarber] = React.useState<Employee | null>(null) // null = Any Barber
+  const [selectedService, setSelectedService] = React.useState<Service | null>(initialService)
+  const [selectedBarber, setSelectedBarber] = React.useState<Employee | null>(initialBarber) // null = Any Barber
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(null)
   const [selectedSlot, setSelectedSlot] = React.useState<TimeSlot | null>(null)
   
@@ -72,32 +71,9 @@ export default function BookingFlow({
   const [accountCreated, setAccountCreated] = React.useState(false)
 
   // -------------------------------------------------------------
-  // Pre-selection triggers from URL queries
-  // -------------------------------------------------------------
-  React.useEffect(() => {
-    const serviceId = searchParams.get("service")
-    const barberId = searchParams.get("barber")
-
-    if (serviceId) {
-      const serv = services.find(s => s.id === serviceId)
-      if (serv) {
-        setSelectedService(serv)
-        setStep(2) // Move to barber selection
-      }
-    }
-
-    if (barberId) {
-      const emp = employees.find(e => e.id === barberId)
-      if (emp) {
-        setSelectedBarber(emp)
-      }
-    }
-  }, [searchParams, services, employees])
-
-  // -------------------------------------------------------------
   // Available Slots Calculations
   // -------------------------------------------------------------
-  const computedSlots = React.useMemo(() => {
+  const computedSlots = React.useMemo<BookableTimeSlot[]>(() => {
     if (!selectedService || !selectedDate) return []
 
     // If a specific barber is selected
@@ -170,7 +146,7 @@ export default function BookingFlow({
     // Resolve barber for Any Barber option
     let finalBarberId = selectedBarber?.id
     if (!finalBarberId && selectedSlot) {
-      const slotMatch = computedSlots.find(s => s.time === selectedSlot.time) as any
+      const slotMatch = computedSlots.find(s => s.time === selectedSlot.time)
       finalBarberId = slotMatch?.employeeId || employees[0].id
     }
 
@@ -190,8 +166,9 @@ export default function BookingFlow({
 
       setCreatedAppointment(ap)
       setStep(5)
-    } catch (err: any) {
-      setFormError(err.message || "Ocurrió un error al procesar tu cita. Inténtalo nuevamente.")
+    } catch (err) {
+      const message = err instanceof Error ? err.message : ""
+      setFormError(message || "Ocurrio un error al procesar tu cita. Intentalo nuevamente.")
     } finally {
       setIsSubmitting(false)
     }
