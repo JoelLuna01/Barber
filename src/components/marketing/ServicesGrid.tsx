@@ -4,7 +4,7 @@ import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
-import { Clock, ArrowRight, Sparkles } from "lucide-react"
+import { Clock, ArrowRight, Star } from "lucide-react"
 import { Service, Category } from "@/types"
 
 interface ServicesGridProps {
@@ -21,50 +21,47 @@ export default function ServicesGrid({ services, categories }: ServicesGridProps
     : services.filter(s => s.category_id === selectedCategory)
 
   return (
-    <section id="servicios" className="w-full bg-zinc-50 py-24 dark:bg-zinc-950">
-      <div className="mx-auto max-w-7xl px-6 md:px-8">
+    <section id="servicios" className="w-full bg-[#0B0B0C] py-28 lg:py-36">
+      <div className="mx-auto max-w-7xl px-6 md:px-12">
 
-        {/* Section Title */}
+        {/* ── Section Header ─────────────────────────────────────────── */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center"
+          transition={{ duration: 0.6 }}
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-8"
         >
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-amber-600 dark:border-amber-800/50 dark:bg-amber-900/20 dark:text-amber-400">
-            <Sparkles className="h-3 w-3" />
-            Nuestros Servicios
-          </span>
-          <h2 className="mt-4 text-3xl font-black tracking-tight text-zinc-900 dark:text-white sm:text-4xl md:text-5xl">
-            Rituales de barbería <br className="hidden sm:inline" />
-            <span className="text-amber-500">a tu medida</span>
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-base text-zinc-500 dark:text-zinc-400">
-            Cortes precisos, rituales relajantes y paquetes exclusivos diseñados para que salgas sintiéndote increíble.
-          </p>
+          <div>
+            <p className="mb-4 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#D89B2B]">
+              <span className="h-px w-8 bg-[#D89B2B]" />
+              Nuestros Servicios
+            </p>
+            <h2 className="font-serif text-4xl font-bold leading-tight text-[#F3EDE2] sm:text-5xl">
+              Rituales diseñados
+              <br />
+              para el caballero moderno.
+            </h2>
+          </div>
+          <Link
+            href="/b/barberbook-studio/book"
+            className="hidden md:inline-flex shrink-0 items-center gap-2 rounded-full border border-white/10 px-6 py-3 text-sm font-bold text-[#F3EDE2] transition hover:border-[#D89B2B]/40 hover:text-[#D89B2B] active:scale-95"
+          >
+            Ver todos
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
         </motion.div>
 
-        {/* Category Filter Pills */}
-        <div className="mt-10 flex flex-wrap justify-center gap-2">
-          <button
-            onClick={() => setSelectedCategory("all")}
-            className={`rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
-              selectedCategory === "all"
-                ? "bg-zinc-950 text-white shadow-lg dark:bg-white dark:text-zinc-950"
-                : "bg-white text-zinc-600 hover:bg-zinc-100 border border-zinc-200 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:border-zinc-800"
-            }`}
-          >
-            Todos
-          </button>
-          {serviceCategories.map(cat => (
+        {/* ── Category Pills ──────────────────────────────────────────── */}
+        <div className="mt-10 flex flex-wrap gap-2">
+          {[{ id: "all", name: "Todos" }, ...serviceCategories].map(cat => (
             <button
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}
-              className={`rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
+              className={`rounded-full px-5 py-2 text-[12px] font-bold uppercase tracking-wider transition-all duration-200 ${
                 selectedCategory === cat.id
-                  ? "bg-zinc-950 text-white shadow-lg dark:bg-white dark:text-zinc-950"
-                  : "bg-white text-zinc-600 hover:bg-zinc-100 border border-zinc-200 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:border-zinc-800"
+                  ? "bg-[#D89B2B] text-[#0B0B0C] shadow-lg shadow-[#D89B2B]/20"
+                  : "border border-white/10 text-[#A1A1AA] hover:border-white/20 hover:text-[#F3EDE2]"
               }`}
             >
               {cat.name}
@@ -72,109 +69,93 @@ export default function ServicesGrid({ services, categories }: ServicesGridProps
           ))}
         </div>
 
-        {/* Services Grid */}
-        <motion.div layout className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* ── Services Grid ───────────────────────────────────────────── */}
+        <motion.div layout className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence mode="popLayout">
             {filteredServices.map((service, index) => (
               <motion.div
                 layout
                 key={service.id}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3, delay: index * 0.06 }}
-                className="group relative flex flex-col overflow-hidden rounded-3xl bg-white border border-zinc-200/80 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl dark:border-zinc-800 dark:bg-zinc-900"
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.35, delay: index * 0.05 }}
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/5 bg-[#17181B] transition-all duration-300 hover:border-[#D89B2B]/20 hover:-translate-y-1"
               >
-                {/* Service Hero Image */}
-                <div className="relative h-52 w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800">
+                {/* Image */}
+                <div className="relative h-56 w-full overflow-hidden bg-[#1E2024]">
                   {service.image_url ? (
                     <Image
                       src={service.image_url}
                       alt={service.name}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   ) : (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-5xl">✂️</span>
-                    </div>
+                    <div className="absolute inset-0 flex items-center justify-center text-5xl opacity-20">✂</div>
                   )}
-                  {/* Color accent top stripe */}
-                  <div
-                    className="absolute top-0 left-0 right-0 h-1"
-                    style={{ backgroundColor: service.color || "#F59E0B" }}
-                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#17181B] via-transparent to-transparent" />
+
                   {/* Featured badge */}
                   {service.is_featured && (
-                    <div className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-amber-500 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-zinc-950">
-                      <Sparkles className="h-2.5 w-2.5" />
+                    <div className="absolute top-3 left-3 flex items-center gap-1 rounded-full bg-[#D89B2B] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#0B0B0C]">
+                      <Star className="h-2.5 w-2.5 fill-current" />
                       Destacado
                     </div>
                   )}
-                  {/* Category label */}
-                  <div className="absolute bottom-3 left-3">
-                    <span className="rounded-full bg-black/60 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-400 backdrop-blur-sm">
-                      {serviceCategories.find(c => c.id === service.category_id)?.name || "Barbería"}
-                    </span>
+
+                  {/* Duration pill */}
+                  <div className="absolute bottom-3 right-3 flex items-center gap-1 rounded-full bg-black/60 px-2.5 py-1 backdrop-blur-sm">
+                    <Clock className="h-3 w-3 text-[#A1A1AA]" />
+                    <span className="text-[10px] font-bold text-[#A1A1AA]">{service.duration_minutes} min</span>
                   </div>
                 </div>
 
-                {/* Card Body */}
+                {/* Body */}
                 <div className="flex flex-1 flex-col p-5">
-                  <h3 className="text-lg font-black text-zinc-900 group-hover:text-amber-600 dark:text-white dark:group-hover:text-amber-400 transition-colors">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#D89B2B]">
+                    {serviceCategories.find(c => c.id === service.category_id)?.name || "Barbería"}
+                  </p>
+                  <h3 className="mt-1.5 text-base font-bold text-[#F3EDE2] transition-colors group-hover:text-[#D89B2B]">
                     {service.name}
                   </h3>
-                  <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed line-clamp-2">
+                  <p className="mt-2 flex-1 text-[13px] leading-relaxed text-[#A1A1AA] line-clamp-2">
                     {service.description}
                   </p>
 
-                  {/* Price & Duration row */}
-                  <div className="mt-4 flex items-center justify-between">
+                  {/* Price + CTA */}
+                  <div className="mt-5 flex items-center justify-between border-t border-white/5 pt-4">
                     <div>
-                      <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400">Desde</span>
-                      <div className="text-2xl font-black text-zinc-950 dark:text-white">
-                        ${Number(service.price).toFixed(2)}
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-[#A1A1AA]">Desde</span>
+                      <div className="text-xl font-bold text-[#F3EDE2]">
+                        ${Number(service.price).toFixed(0)}<span className="text-sm font-normal text-[#A1A1AA]"> MXN</span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1.5 rounded-full bg-zinc-100 px-3 py-1.5 dark:bg-zinc-800">
-                      <Clock className="h-3.5 w-3.5 text-zinc-400" />
-                      <span className="text-xs font-bold text-zinc-600 dark:text-zinc-300">
-                        {service.duration_minutes} min
-                      </span>
-                    </div>
+                    <Link
+                      href={`/b/barberbook-studio/book?service=${service.id}`}
+                      className="flex items-center gap-1.5 rounded-full bg-white/5 border border-white/10 px-4 py-2 text-xs font-bold text-[#F3EDE2] transition-all hover:bg-[#D89B2B] hover:text-[#0B0B0C] hover:border-[#D89B2B] active:scale-95"
+                    >
+                      Reservar
+                      <ArrowRight className="h-3 w-3" />
+                    </Link>
                   </div>
-
-                  {/* CTA Button */}
-                  <Link
-                    href={`/b/barberbook-studio/book?service=${service.id}`}
-                    className="mt-5 flex items-center justify-center gap-2 rounded-xl bg-zinc-950 py-3 text-sm font-bold text-white transition-all hover:bg-amber-500 hover:text-zinc-950 dark:bg-zinc-800 dark:hover:bg-amber-500 dark:hover:text-zinc-950 active:scale-95"
-                  >
-                    Reservar este servicio
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Link>
                 </div>
               </motion.div>
             ))}
           </AnimatePresence>
         </motion.div>
 
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-14 text-center"
-        >
+        {/* Mobile CTA */}
+        <div className="mt-10 flex justify-center md:hidden">
           <Link
             href="/b/barberbook-studio/book"
-            className="inline-flex items-center gap-2 rounded-full bg-amber-500 px-8 py-4 text-sm font-black uppercase tracking-wider text-zinc-950 transition hover:bg-amber-400 active:scale-95 shadow-lg shadow-amber-500/20"
+            className="inline-flex items-center gap-2 rounded-full border border-white/10 px-7 py-3.5 text-sm font-bold text-[#F3EDE2] transition hover:border-[#D89B2B]/40 hover:text-[#D89B2B]"
           >
+            Reservar ahora
             <ArrowRight className="h-4 w-4" />
-            Ver todos los servicios y reservar
           </Link>
-        </motion.div>
-
+        </div>
       </div>
     </section>
   )

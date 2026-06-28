@@ -31,48 +31,70 @@ export default async function Home() {
   const shop = await BarberShopService.getBarbershop("barberbook-studio")
 
   return (
-    <div className="flex min-h-screen flex-col bg-zinc-50 dark:bg-black font-sans scroll-smooth">
-      {/* Navigation */}
+    <div className="flex min-h-screen flex-col bg-[#0B0B0C] font-sans scroll-smooth">
+      {/* Navigation — fixed, sits on top of hero */}
       <Navbar />
 
-      {/* Hero Section */}
+      {/* Hero — full screen */}
       <Hero />
 
-      {/* Services Section */}
+      {/* Services */}
       <ServicesGrid services={services} categories={categories} />
 
-      {/* Team Section */}
+      {/* Team */}
       <TeamSection employees={employees} />
 
-      {/* Gallery Section */}
+      {/* Gallery */}
       <GalleryGrid items={gallery} />
 
-      {/* Reviews Section */}
+      {/* Reviews */}
       <ReviewsCarousel reviews={reviews} />
 
-      {/* Contact & Map Section */}
+      {/* Contact & Map */}
       <ContactMap />
 
-      {/* FAQs Section */}
+      {/* FAQs */}
       <FAQSection />
 
-      {/* Footer */}
-      <footer className="w-full bg-zinc-950 text-zinc-500 py-12 border-t border-zinc-900/60 dark:bg-black">
-        <div className="mx-auto max-w-7xl px-6 md:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-lg text-white">BARBER<span className="text-amber-500">BOOK</span></span>
-            <span className="text-xs text-zinc-600">| © {new Date().getFullYear()} Todos los derechos reservados.</span>
+      {/* ── Premium Footer ─────────────────────────────────────────── */}
+      <footer className="w-full border-t border-white/5 bg-[#0B0B0C]">
+        {/* Final CTA banner */}
+        <div className="border-b border-white/5 py-16">
+          <div className="mx-auto max-w-4xl px-6 md:px-12 text-center">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#D89B2B] mb-4">Reserva tu ritual</p>
+            <h2 className="font-serif text-4xl font-bold text-[#F3EDE2] md:text-5xl">
+              Tu mejor versión<br />empieza aquí.
+            </h2>
+            <p className="mt-4 text-[#A1A1AA] text-base max-w-md mx-auto">
+              Sin esperas, sin complicaciones. Elige tu servicio, elige tu hora y preséntate listo.
+            </p>
+            <a
+              href="/b/barberbook-studio/book"
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#D89B2B] px-8 py-4 text-sm font-bold text-[#0B0B0C] transition-all hover:bg-[#e0a835] active:scale-[0.97] shadow-lg shadow-[#D89B2B]/20"
+            >
+              Reservar Ahora — Es Gratis
+            </a>
           </div>
-          <div className="flex gap-6 text-sm">
-            <a href="#servicios" className="hover:text-white transition">Servicios</a>
-            <a href="#equipo" className="hover:text-white transition">Equipo</a>
-            <a href="#ubicacion" className="hover:text-white transition">Ubicación</a>
-            <a href="/login" className="hover:text-white transition font-medium text-amber-500">Acceso Barberos</a>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="mx-auto max-w-7xl px-6 md:px-12 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-2.5">
+            <span className="font-serif text-lg font-bold text-[#F3EDE2]">
+              BARBER<span className="text-[#D89B2B]">BOOK</span>
+            </span>
+            <span className="text-xs text-[#A1A1AA]">© {new Date().getFullYear()}</span>
+          </div>
+          <div className="flex gap-6 text-[13px]">
+            <a href="#servicios" className="text-[#A1A1AA] transition hover:text-[#F3EDE2]">Servicios</a>
+            <a href="#equipo" className="text-[#A1A1AA] transition hover:text-[#F3EDE2]">El Barbero</a>
+            <a href="#ubicacion" className="text-[#A1A1AA] transition hover:text-[#F3EDE2]">Ubicación</a>
+            <a href="/login" className="text-[#D89B2B] font-semibold transition hover:text-[#e0a835]">Acceso Admin</a>
           </div>
         </div>
       </footer>
 
-      {/* Persistent Floating WhatsApp widget */}
+      {/* Floating WhatsApp widget */}
       <FloatingWhatsApp phone={shop.whatsapp || "+525512345678"} shopName={shop.name} />
     </div>
   )

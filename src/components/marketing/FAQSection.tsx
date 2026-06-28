@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Plus, Minus } from "lucide-react"
+import { Plus } from "lucide-react"
 
 interface FAQItem {
   question: string
@@ -11,57 +11,83 @@ interface FAQItem {
 
 const faqs: FAQItem[] = [
   {
-    question: "¿Es necesario registrarse para agendar una cita?",
-    answer: "No, en absoluto. Puedes agendar como invitado ingresando únicamente tu nombre y teléfono. Sin embargo, al finalizar tu reserva te daremos la opción de crear una contraseña por si deseas guardar tu historial de cortes, acumular puntos de fidelidad y ver tus próximas citas en un panel exclusivo."
+    question: "¿Es necesario registrarse para agendar?",
+    answer: "No es necesario. Puedes reservar como invitado con solo tu nombre y número de teléfono. Si creas una cuenta, podrás consultar tu historial de cortes, acumular puntos de fidelidad y gestionar tus citas futuras desde tu panel."
   },
   {
-    question: "¿Cómo puedo cancelar o reagendar mi cita?",
-    answer: "Puedes hacerlo directamente desde tu panel de cliente si te registraste, o bien, haciendo clic en el enlace que te llegará en tu correo de confirmación. Te pedimos realizar cualquier modificación con al menos 2 horas de anticipación por respeto al tiempo de nuestros barberos."
+    question: "¿Cómo cancelo o reagendo mi cita?",
+    answer: "Desde tu panel de cliente o haciendo clic en el enlace del correo de confirmación. Te pedimos hacerlo con al menos 2 horas de anticipación por respeto al tiempo de nuestros barberos."
   },
   {
-    question: "¿Qué pasa si llego tarde a mi cita?",
-    answer: "Tenemos una tolerancia máxima de 10 minutos. Transcurrido ese tiempo, es posible que debamos acortar tu servicio o reprogramarlo para no afectar a los clientes que agendaron en los horarios siguientes."
+    question: "¿Qué pasa si llego tarde?",
+    answer: "Tenemos una tolerancia máxima de 10 minutos. Pasado ese tiempo, el servicio puede acortarse o reprogramarse para no afectar a los clientes siguientes."
   },
   {
-    question: "¿Cuáles son los métodos de pago aceptados?",
-    answer: "Aceptamos pagos en efectivo, tarjetas de débito/crédito, transferencias bancarias y pagos en línea mediante Mercado Pago y Stripe directamente en nuestro mostrador o al confirmar tu cita."
+    question: "¿Qué formas de pago aceptan?",
+    answer: "Efectivo, tarjetas de débito y crédito, transferencias bancarias, y Mercado Pago. También puedes pagar al confirmar tu cita en línea."
   },
   {
-    question: "¿Ofrecen servicios para niños y corte de barba detallado?",
-    answer: "Sí, contamos con barberos especializados en cortes infantiles pacientes y dinámicos, así como rituales clásicos de afeitado con toalla caliente, perfilados al milímetro y mascarillas hidratantes para la piel de la cara."
-  }
+    question: "¿Atienden a niños y hacen rituales de barba detallados?",
+    answer: "Sí. Contamos con barberos especializados en cortes infantiles, así como rituales clásicos de afeitado con toalla caliente, perfilado al milímetro y mascarillas hidratantes."
+  },
 ]
 
 export default function FAQSection() {
   const [openIndex, setOpenIndex] = React.useState<number | null>(null)
 
   return (
-    <section id="faqs" className="w-full bg-zinc-50 py-24 dark:bg-black">
-      <div className="mx-auto max-w-4xl px-6 md:px-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
-            Preguntas Frecuentes
-          </h2>
-          <p className="mt-4 text-lg text-zinc-600 dark:text-zinc-400">
-            Todo lo que necesitas saber sobre nuestro sistema de reservas y servicios en BarberBook Studio.
-          </p>
-        </div>
+    <section id="faqs" className="w-full bg-[#0B0B0C] py-28 lg:py-36">
+      <div className="mx-auto max-w-3xl px-6 md:px-12">
 
-        <div className="mt-16 space-y-4">
+        {/* ── Header ─────────────────────────────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-14"
+        >
+          <p className="mb-4 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#D89B2B]">
+            <span className="h-px w-8 bg-[#D89B2B]" />
+            Preguntas Frecuentes
+          </p>
+          <h2 className="font-serif text-4xl font-bold text-[#F3EDE2] sm:text-5xl">
+            Todo lo que<br />necesitas saber.
+          </h2>
+        </motion.div>
+
+        {/* ── Accordion ──────────────────────────────────────────────── */}
+        <div className="space-y-1">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index
             return (
-              <div
+              <motion.div
                 key={index}
-                className="overflow-hidden rounded-2xl border border-zinc-200 bg-white transition-all dark:border-zinc-800 dark:bg-zinc-950"
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.35, delay: index * 0.05 }}
+                className={`overflow-hidden rounded-2xl border transition-all duration-300 ${
+                  isOpen
+                    ? "border-[#D89B2B]/20 bg-[#17181B]"
+                    : "border-white/5 bg-[#17181B]/60 hover:border-white/10"
+                }`}
               >
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="flex w-full items-center justify-between px-6 py-5 text-left font-semibold text-zinc-900 dark:text-white focus:outline-none"
+                  className="flex w-full items-center justify-between px-6 py-5 text-left focus:outline-none"
+                  aria-expanded={isOpen}
                 >
-                  <span className="pr-4 text-base md:text-lg">{faq.question}</span>
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-                    {isOpen ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                  <span className={`pr-6 text-[15px] font-semibold transition-colors ${
+                    isOpen ? "text-[#F3EDE2]" : "text-[#A1A1AA]"
+                  }`}>
+                    {faq.question}
+                  </span>
+                  <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
+                    isOpen
+                      ? "rotate-45 border-[#D89B2B]/30 bg-[#D89B2B]/10 text-[#D89B2B]"
+                      : "border-white/10 bg-white/5 text-[#A1A1AA]"
+                  }`}>
+                    <Plus className="h-3.5 w-3.5" />
                   </span>
                 </button>
 
@@ -71,18 +97,19 @@ export default function FAQSection() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
+                      transition={{ duration: 0.25, ease: "easeInOut" }}
                     >
-                      <div className="border-t border-zinc-100 px-6 py-5 text-sm text-zinc-600 dark:border-zinc-800 dark:text-zinc-400 md:text-base leading-relaxed">
+                      <div className="border-t border-white/5 px-6 pb-6 pt-4 text-[14px] leading-[1.8] text-[#A1A1AA]">
                         {faq.answer}
                       </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
+              </motion.div>
             )
           })}
         </div>
+
       </div>
     </section>
   )
